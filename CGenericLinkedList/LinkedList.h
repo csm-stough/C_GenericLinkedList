@@ -10,15 +10,15 @@
 /*
 * Structure representing the individual node
 */
-typedef struct {
+typedef struct node{
 	void* data;
-	struct Node* next, * prev;
+	struct node* next, * prev;
 }Node;
 
 /*
 * Structure representing the list itself
 */
-typedef struct {
+typedef struct list{
 	Node* head, * tail;
 	int count, data_size;
 	void* max, * min;
@@ -32,7 +32,7 @@ typedef struct {
 List* create_list(int data_size, void(*print)(void*), int(*compare)(void*, void*));
 
 /*
-* Here are some functions that are only to hep the linked list perform certain fuctions
+* Here are some static functions that are only to help the linked list perform certain actions
 */
 static Node* create_node(int data_size, void* data);
 static void free_node(Node** node);
@@ -53,9 +53,10 @@ void enqueue_data(List* list, void* data);
 void* dequeue_data(List* list);
 
 /*
-* Here are some misc. functions providing more operation on the list
+* Here are some misc. functions providing more operations on the list
 */
 void delete_data(List* list, void* data);
+void delete_index(List* list, int index);
 void free_list(List** list);
 void print_list(List* list);
 void sort_list(List** list);

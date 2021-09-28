@@ -23,11 +23,9 @@ int main(int argc, char** argv) {
 		print_list(list);
 	}
 
-	while(list->count > 1) {
-		printf("Pop list returns: %d\n", *(int*)dequeue_data(list));
-		printf("Max: %d, Min: %d, Count: %d\n", *(int*)list->max, *(int*)list->min, list->count);
-		print_list(list);
-	}
+	delete_index(list, 5);
+
+	print_list(list);
 
 	return 0;
 }

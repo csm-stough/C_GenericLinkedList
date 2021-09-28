@@ -176,6 +176,74 @@ void* dequeue_data(List* list) {
 	return pop_data(list);
 }
 
+void delete_data(List* list, void* data) {
+	//first we check to see if the list is not allocated
+	if (!check_list(list)) {
+		return;
+	}
+	//Now iterate through the list, looking for the node to delete
+	Node* curr = list->head, * prev = NULL;
+	while (curr) {
+		if (list->compare(curr->data, data) == 0) {
+			//we found the data to delete
+			//point the next and prev pointers around the node(if applicable)
+			if (prev == NULL) { //curr is the head
+				pop_data(list); //removing the head
+			}
+			else if (!curr->next) { //curr is the tail
+				list->tail = list->tail->prev;
+				list->tail->next = NULL;
+				free_node(&curr);
+				list->count--;
+			}
+			else { //curr is an internal node
+				curr->prev->next = curr->next;
+				curr->next->prev = curr->prev;
+				free_node(&curr);
+				list->count--;
+			}
+			return;
+		}
+		prev = curr;
+		curr = curr->next;
+	}
+	//if we made it here, the data is not in the list
+}
+
+void delete_index(List* list, int index) {
+	//first we check to see if the list is not allocated
+	if (!check_list(list)) {
+		return;
+	}
+	Node* curr = list->head, * prev = NULL;
+	int i = 0;
+	while (i < index) {
+		prev = curr;
+		curr = curr->next;
+		i++;
+		//if curr is null here, the index given is beyond the bounds of the list
+		if (!curr) {
+			return;
+		}
+	}
+	//at this point curr is the node were deleting
+	if (prev == NULL) {
+		pop_data(list);
+	}
+	else if (!curr->next) {
+		list->tail = list->tail->prev;
+		list->tail->next = NULL;
+		free_node(&curr);
+		list->count--;
+	}
+	else {
+		curr->prev->next = curr->next;
+		curr->next->prev = curr->prev;
+		free_node(&curr);
+		list->count--;
+	}
+}
+
 void print_list(List* list) {
 	if (!check_list(list)) {
 		return;
