@@ -244,6 +244,24 @@ void delete_index(List* list, int index) {
 	}
 }
 
+void free_list(List** list) {
+	//first we check to see if the list is not allocated
+	if (!check_list(*list)) {
+		return;
+	}
+	//while the head of the list isnt null
+	while ((*list)->head) {
+		//point to the head in a temp variable
+		Node* tmp = (*list)->head;
+		//head = head.next
+		(*list)->head = (*list)->head->next;
+		//free the old head
+		free_node(&tmp);
+	}
+	//null out our list ref
+	*list = NULL;
+}
+
 void print_list(List* list) {
 	if (!check_list(list)) {
 		return;
@@ -258,4 +276,24 @@ void print_list(List* list) {
 		curr = curr->next;
 	}
 	printf("]\n");
+}
+
+void sort_list(List** list) {
+	//first we check to see if the list is not allocated
+	if (!check_list(list)) {
+		return;
+	}
+	//create a new list to hold the sorted values
+	List* sorted_list = create_list((*list)->data_size, (*list)->compare, (*list)->print);
+	//iterate while there are still values in the unsorted list
+	while ((*list)->count > 0) {
+		//push the max value of the unsorted list into the sorted list
+		push_data(sorted_list, (*list)->max);
+		//then delete that value from the unsorted list
+		delete_data(*list, (*list)->max);
+	}
+	//free up the unsorted list
+	free_list(list);
+	//reassign the pointer to our list to the new sorted list
+	*list = sorted_list;
 }
