@@ -24,5 +24,11 @@ int main(int argc, char** argv) {
 	//print the list
 	print_list(list);
 
+	for (int j = 0; j < 5; j++) {
+		printf("Pop list returns: %d\n", *(int*)pop_data(list));
+	}
+
+	print_list(list);
+
 	return 0;
 }

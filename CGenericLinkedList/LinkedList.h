@@ -35,6 +35,7 @@ List* create_list(int data_size, void(*print)(void*), int(*compare)(void*, void*
 * Here are some functions that are only to hep the linked list perform certain fuctions
 */
 static Node* create_node(int data_size, void* data);
+static void free_node(Node** node);
 static void update_min(List* list);
 static void update_max(List* list);
 static bool check_list(List* list);

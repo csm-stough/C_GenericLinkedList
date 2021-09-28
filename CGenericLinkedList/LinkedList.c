@@ -25,6 +25,12 @@ static Node* create_node(int data_size, void* data)
 	return new_node;
 }
 
+static void free_node(Node** node) {
+	free((*node)->data);
+	free(*node);
+	node = NULL;
+}
+
 static void update_min(List* list) {
 	//first we check if the list is not allocated
 	if (!check_list(list))
@@ -98,7 +104,10 @@ void* pop_data(List* list) {
 		Node* tmp = list->head;
 		list->head = list->head->next;
 		list->head->prev = NULL;
-
+		void* data = NULL;
+		memcpy(&data, tmp->data, list->data_size);
+		free_node(&tmp);
+		return &data;
 	}
 }
 
