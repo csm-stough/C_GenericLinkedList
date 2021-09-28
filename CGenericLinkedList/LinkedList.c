@@ -38,11 +38,14 @@ static void update_min(List* list) {
 
 	//then we will iterate through our list
 	Node* curr = list->head;
+	list->min = curr->data;
+	if (!curr) { list->min = NULL; }
 	while (curr) {
 		//compare the curr node data with the current minimum value,
 		//if the curr data is less, then its the new minimum
 		if (list->compare(curr->data, list->min) < 0)
 			list->min = curr->data;
+		curr = curr->next;
 	}
 }
 
@@ -53,11 +56,14 @@ static void update_max(List* list) {
 
 	//then we will iterate through our list
 	Node* curr = list->head;
+	list->max = curr->data;
+	if (!curr) { list->max = NULL; }
 	while (curr) {
 		//compare the curr node data with the current maximum value,
 		//if the curr data is greater, then its the new maximum
 		if (list->compare(curr->data, list->max) > 0)
 			list->max = curr->data;
+		curr = curr->next;
 	}
 }
 
@@ -82,11 +88,21 @@ void push_data(List* list, void* data) {
 	if (list->count == 0) {
 		//setting the head and tail to the new node and incrementing count
 		list->head = list->tail = new_node;
+		//no need to call update_max/min, since we already know the max/min here
+		list->max = new_node->data;
+		list->min = new_node->data;
 	}
 	else {
 		new_node->next = list->head;
 		list->head->prev = new_node;
 		list->head = new_node;
+		//this is another situation where we dont need to call update_max/min because we know the new max/min here
+		if (list->compare(new_node->data, list->max) > 0) {
+			list->max = new_node->data;
+		}
+		else if (list->compare(new_node->data, list->min) < 0) {
+			list->min = new_node->data;
+		}
 	}
 	list->count++;
 }
@@ -101,12 +117,27 @@ void* pop_data(List* list) {
 		return NULL;
 	}
 	else {
+		//juggling nodes:
+		//list->head now points to the old list->head->next
 		Node* tmp = list->head;
 		list->head = list->head->next;
-		list->head->prev = NULL;
+		//if the new list->head is not null, null the new list->head->prev
+		if(list->head)
+			list->head->prev = NULL;
+		//temporary storage for old head data
 		void* data = NULL;
+		//updating max/min
+		if (list->compare(tmp->data, list->max) == 0) {
+			update_max(list);
+		}
+		if (list->compare(tmp->data, list->min) == 0) {
+			update_min(list);
+		}
+		//copying data from old head
 		memcpy(&data, tmp->data, list->data_size);
+		//freeing the old head
 		free_node(&tmp);
+		list->count--;
 		return &data;
 	}
 }

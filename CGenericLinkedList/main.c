@@ -19,16 +19,15 @@ int main(int argc, char** argv) {
 	//pushing data to the list
 	for (int i = 0; i < 10; i++) {
 		push_data(list, &i);
+		printf("Max: %d, Min: %d\n", *(int*)list->max, *(int*)list->min);
+		print_list(list);
 	}
 
-	//print the list
-	print_list(list);
-
-	for (int j = 0; j < 5; j++) {
+	for (int j = 0; j < 11; j++) {
 		printf("Pop list returns: %d\n", *(int*)pop_data(list));
+		printf("Max: %d, Min: %d\n", *(int*)list->max, *(int*)list->min);
+		print_list(list);
 	}
-
-	print_list(list);
 
 	return 0;
 }
