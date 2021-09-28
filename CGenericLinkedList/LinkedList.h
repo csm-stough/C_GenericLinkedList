@@ -1,12 +1,18 @@
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
 
+//both stdio.h and stdlib.h are required to define NULL
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+
 /*
 * Structure representing the individual node
 */
 typedef struct {
 	void* data;
-	Node* next, * prev;
+	struct Node* next, * prev;
 }Node;
 
 /*
@@ -14,7 +20,7 @@ typedef struct {
 */
 typedef struct {
 	Node* head, * tail;
-	int count;
+	int count, data_size;
 	void* max, * min;
 	void(*print)(void*);
 	int(*compare)(void*, void*);
@@ -28,9 +34,10 @@ List* create_list(int data_size, void(*print)(void*), int(*compare)(void*, void*
 /*
 * Here are some functions that are only to hep the linked list perform certain fuctions
 */
-static Node* create_node(void* data);
+static Node* create_node(int data_size, void* data);
 static void update_min(List* list);
-static void undate_max(List* list);
+static void update_max(List* list);
+static bool check_list(List* list);
 
 /*
 * These functions allow us to use the list like a stack

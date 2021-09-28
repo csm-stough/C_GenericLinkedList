@@ -21,6 +21,10 @@
   <ItemGroup>
     <ClInclude Include="LinkedList.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="LinkedList.c" />
+    <ClCompile Include="main.c" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
