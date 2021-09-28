@@ -38,8 +38,8 @@ static void update_min(List* list) {
 
 	//then we will iterate through our list
 	Node* curr = list->head;
+	if (!curr) { list->min = NULL; return; }
 	list->min = curr->data;
-	if (!curr) { list->min = NULL; }
 	while (curr) {
 		//compare the curr node data with the current minimum value,
 		//if the curr data is less, then its the new minimum
@@ -56,8 +56,8 @@ static void update_max(List* list) {
 
 	//then we will iterate through our list
 	Node* curr = list->head;
+	if (!curr) { list->max = NULL; return; }
 	list->max = curr->data;
-	if (!curr) { list->max = NULL; }
 	while (curr) {
 		//compare the curr node data with the current maximum value,
 		//if the curr data is greater, then its the new maximum
@@ -89,8 +89,7 @@ void push_data(List* list, void* data) {
 		//setting the head and tail to the new node and incrementing count
 		list->head = list->tail = new_node;
 		//no need to call update_max/min, since we already know the max/min here
-		list->max = new_node->data;
-		list->min = new_node->data;
+		list->min = list->max = new_node->data;
 	}
 	else {
 		new_node->next = list->head;
@@ -122,8 +121,10 @@ void* pop_data(List* list) {
 		Node* tmp = list->head;
 		list->head = list->head->next;
 		//if the new list->head is not null, null the new list->head->prev
-		if(list->head)
+		if (list->head)
 			list->head->prev = NULL;
+		else //list->head == list->tail
+			list->tail = NULL;
 		//temporary storage for old head data
 		void* data = NULL;
 		//updating max/min
@@ -140,6 +141,39 @@ void* pop_data(List* list) {
 		list->count--;
 		return &data;
 	}
+}
+
+void enqueue_data(List* list, void* data) {
+	//first we check to see if the list is not allocated
+	if (!check_list(list)) {
+		return;
+	}
+	//creating our new node
+	Node* new_node = create_node(list->data_size, data);
+	//check if the list is empty
+	if (list->count == 0) {
+		list->head = list->tail = new_node;
+		list->min = list->max = new_node->data;
+	}
+	else {
+		//setting the new tail
+		list->tail->next = new_node;
+		new_node->prev = list->tail;
+		list->tail = new_node;
+		//updating min/max
+		if (list->compare(new_node->data, list->max) > 0) {
+			list->max = new_node->data;
+		}
+		else if (list->compare(new_node->data, list->min) < 0) {
+			list->min = new_node->data;
+		}
+	}
+	list->count++;
+}
+
+void* dequeue_data(List* list) {
+	//For our list dequeue should perform the exact same operation as the pop_data --> no reason to write again
+	return pop_data(list);
 }
 
 void print_list(List* list) {

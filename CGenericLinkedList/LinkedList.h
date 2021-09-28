@@ -49,8 +49,8 @@ void* pop_data(List* list);
 /*
 * These functions allow us to use the list like a queue
 */
-void enque_data(List* list, void* data);
-void* deque_data(List* list);
+void enqueue_data(List* list, void* data);
+void* dequeue_data(List* list);
 
 /*
 * Here are some misc. functions providing more operation on the list

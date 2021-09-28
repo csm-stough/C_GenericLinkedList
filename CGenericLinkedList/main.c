@@ -18,14 +18,14 @@ int main(int argc, char** argv) {
 	
 	//pushing data to the list
 	for (int i = 0; i < 10; i++) {
-		push_data(list, &i);
-		printf("Max: %d, Min: %d\n", *(int*)list->max, *(int*)list->min);
+		enqueue_data(list, &i);
+		printf("Max: %d, Min: %d, Count: %d\n", *(int*)list->max, *(int*)list->min, list->count);
 		print_list(list);
 	}
 
-	for (int j = 0; j < 11; j++) {
-		printf("Pop list returns: %d\n", *(int*)pop_data(list));
-		printf("Max: %d, Min: %d\n", *(int*)list->max, *(int*)list->min);
+	while(list->count > 1) {
+		printf("Pop list returns: %d\n", *(int*)dequeue_data(list));
+		printf("Max: %d, Min: %d, Count: %d\n", *(int*)list->max, *(int*)list->min, list->count);
 		print_list(list);
 	}
 
