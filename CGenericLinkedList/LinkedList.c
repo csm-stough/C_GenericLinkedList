@@ -244,6 +244,48 @@ void delete_index(List* list, int index) {
 	}
 }
 
+int find_data(List* list, void* data) {
+	//first we check to see if the list is not allocated
+	if (!check_list(list)) {
+		return;
+	}
+	Node* curr = list->head;
+	int i = 0;
+	//iterate over nodes until data is found
+	while (curr) {
+		if (list->compare(curr->data, data) == 0) {
+			return i;
+		}
+		i++;
+		curr = curr->next;
+	}
+	//if data not in list, return -1
+	return -1;
+}
+
+void* get_data(List* list, int index) {
+	//first we check to see if the list is not allocated
+	if (!check_list(list)) {
+		return;
+	}
+	Node* curr = list->head;
+	int i = 0;
+	while (curr && i < index) {
+		i++;
+		curr = curr->next;
+		if (!curr) {
+			return NULL;
+		}
+	}
+	//at this point i=index or curr is null
+	if (curr) {
+		return curr->data;
+	}
+	else {
+		return NULL;
+	}
+}
+
 void free_list(List** list) {
 	//first we check to see if the list is not allocated
 	if (!check_list(*list)) {

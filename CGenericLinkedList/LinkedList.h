@@ -57,6 +57,8 @@ void* dequeue_data(List* list);
 */
 void delete_data(List* list, void* data);
 void delete_index(List* list, int index);
+int find_data(List* list, void* data);
+void* get_data(List* list, int index);
 void free_list(List** list);
 void print_list(List* list);
 void sort_list(List** list);
